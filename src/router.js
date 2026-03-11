@@ -16,7 +16,7 @@ const router = (request, response) => {
         response.end(file);
       }
     });
-  } else if (endpoint === "/main.css") {
+  } else if (endpoint === "/public/main.css") {
     const filePath = path.join(__dirname, "..", "public", "main.css");
     fs.readFile(filePath, (error, file) => {
       if (error) {
@@ -24,6 +24,28 @@ const router = (request, response) => {
         return;
       } else {
         response.writeHead(200, { "Content-Type": "text/css" });
+        response.end(file);
+      }
+    });
+  } else if (endpoint === "/public/script.js") {
+    const filePath = path.join(__dirname, "..", "public", "script.js");
+    fs.readFile(filePath, (error, file) => {
+      if (error) {
+        console.log(error);
+        return;
+      } else {
+        response.writeHead(200, { "Content-Type": "application/javascript" });
+        response.end(file);
+      }
+    });
+  } else if (endpoint === "/public/favicon.ico") {
+    const filePath = path.join(__dirname, "..", "public", "favicon.ico");
+    fs.readFile(filePath, (error, file) => {
+      if (error) {
+        console.log(error);
+        return;
+      } else {
+        // response.writeHead(200, { "Content-Type": "application/javascript" });
         response.end(file);
       }
     });
@@ -39,6 +61,18 @@ const router = (request, response) => {
         response.end(file);
       }
     });
+  } else if (endpoint === "/public/img/logo1.png") {
+    const filePath = path.join(__dirname, "..", "public", "img", "logo1.png");
+    console.log(filePath);
+    fs.readFile(filePath, (error, file) => {
+      if (error) {
+        console.log(error);
+        return;
+      } else {
+        response.writeHead(200, { "Content-Type": "image/png" });
+        response.end(file);
+      }
+    });
   } else if (method === "POST" && endpoint === "/create-post") {
     let allTheData = "";
     request.on("data", (chunkOfData) => {
@@ -50,6 +84,9 @@ const router = (request, response) => {
       response.writeHead(302, { Location: "/" });
       response.end();
     });
+  } else {
+    response.writeHead(404);
+    response.end(`${method} ${endpoint} not found`);
   }
 };
 module.exports = router;
